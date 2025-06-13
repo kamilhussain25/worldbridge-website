@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Form with Leaflet Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f2f5;
+    }
+    .map-section {
+      padding: 10px;
+    }
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .tab.active {
+      background-color: #d3d3d3;
+    }
+    #map {
+      height: 400px;
+      width: 100%;
+      border-radius: 8px;
+    }
+    .form-section {
+      padding: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+       height: 50px;
+      padding: 16px 20px;
+      box-sizing:border-box;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  button {
+  background-color: #242fc0;
+  color: rgb(255, 255, 255);
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+button:hover {
+  background-color: #218838;
+}
+
+  </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="flex justify-between items-center bg-black p-3 text-white">
+  <a href="tel:+923122700372" class="hidden sm:block">+92 312 2700372</a>
+  <a href="mailto:info@worldbridgevisas.com" class="mx-auto sm:mx-0">info@worldbridgevisas.com</a>
+</div>
+
+<!-- Main Container -->
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow p-6 flex flex-col md:flex-row gap-6">
+
+  <!-- Form Section -->
+  <div class="form-section w-full md:w-1/2">
+    <script> let submitted = false; </script>
+
+    <form 
+      id="contactForm"
+      action="https://formspree.io/f/mgvykgrj"
+      method="POST"
+      target="hidden_iframe"
+      onsubmit="submitted=true;"
+    >
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" name="fullName" required />
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone/Mobile Number *</label>
+        <input type="tel" id="phone" name="phone" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" />
+      </div>
+      <div class="form-group">
+        <label for="services">Services *</label>
+        <select id="services" name="services" required>
+          <option value="">Select...</option>
+          <option value="Service 1">Service 1</option>
+          <option value="Service 2">Service 2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="city">City *</label>
+        <input type="text" id="city" name="city" required />
+      </div>
+      <div class="form-group">
+        <label for="budget">Budget *</label>
+        <input type="text" id="budget" name="budget" required />
+      </div>
+      <div class="form-group">
+        <label for="occupation">Occupation *</label>
+        <input type="text" id="occupation" name="occupation" required />
+      </div>
+      <div class="form-group">
+        <label for="education">Education *</label>
+        <input type="text" id="education" name="education" required />
+      </div>
+      <div class="form-group">
+        <label for="comments">Comments/Questions</label>
+        <textarea id="comments" name="comments" rows="4"></textarea>
+      </div>
+      <button 
+  type="submit"
+  class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg w-full transition"
+>
+  Submit
+</button>
+
+    </form>
+
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" 
+      onload="if(submitted) { alert('Form submitted successfully!'); submitted=false; }">
+    </iframe>
+  </div>
+
+  <!-- Map Section -->
+  <div class="map-section w-full md:w-1/2">
+    <div class="tabs flex mb-4">
+      <div class="tab active" id="tabKarachi">Karachi Office</div>
+      <div class="tab" id="tabLahore">Lahore Office</div>
+    </div>
+    <div id="map" class="rounded"></div>
+  </div>
+</div>
+
+<!-- Back Button -->
+<div class="flex justify-center md:justify-start ml-0 md:ml-4 mt-4 ">
+  <a href="index.html" class="inline-flex text-white bg-red-500 hover:bg-red-600 border-0 py-2 px-6 rounded text-lg">
+    ← Go to Home page
+  </a>
+</div>
+
+<!-- Leaflet Map JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const karachiCoords = { lat: 24.8575, lng: 67.0340 };
+  const lahoreCoords = { lat: 31.5204, lng: 74.3587 };
+
+  const map = L.map('map').setView([karachiCoords.lat, karachiCoords.lng], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  let marker = L.marker([karachiCoords.lat, karachiCoords.lng]).addTo(map);
+
+  function setActiveTab(tabId) {
+    document.getElementById('tabKarachi').classList.remove('active');
+    document.getElementById('tabLahore').classList.remove('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  document.getElementById('tabKarachi').addEventListener('click', () => {
+    setActiveTab('tabKarachi');
+    map.setView([karachiCoords.lat, karachiCoords.lng], 12);
+    marker.setLatLng([karachiCoords.lat, karachiCoords.lng]);
+  });
+
+  document.getElementById('tabLahore').addEventListener('click', () => {
+    setActiveTab('tabLahore');
+    map.setView([lahoreCoords.lat, lahoreCoords.lng], 12);
+    marker.setLatLng([lahoreCoords.lat, lahoreCoords.lng]);
+  });
+</script>
+
+</body>
+</html>
