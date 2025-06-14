@@ -193,7 +193,7 @@ body {
 .banner-content {
   position: relative;
   z-index: 1;
-  padding: 50px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -340,4 +340,34 @@ body {
 
 .whatsapp-button:hover {
   transform: scale(1.1);
+}
+
+
+@media (max-width: 768px) {
+  .banner-content {
+    padding: 18px;
+    align-items: center; /* center text on mobile */
+    text-align: center;
+  }
+
+  .tagline {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin-bottom: 15px;
+  }
+
+  .banner-content h1 {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+
+  .banner-content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .cta-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
 }
